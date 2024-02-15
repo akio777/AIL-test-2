@@ -1,21 +1,39 @@
 {
-  "name": "hardhat-project",
+  "name": "ail-test-smart-contracts",
+  "scripts": {
+    "compile": "bun hardhat compile",
+    "clean": "bun hardhat clean"
+  },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "hardhat": "^2.20.0"
+    "@openzeppelin/contracts": "^4.9.5",
+    "@openzeppelin/contracts-upgradeable": "^4.9.5",
+    "@typechain/ethers-v5": "^11.1.2",
+    "@typechain/hardhat": "^4.0.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.5",
+    "chai": "^4.3.4",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.8.2",
+    "prettier": "^2.5.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^10.4.0",
+    "typechain": "^8.3.2",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "@nomiclabs/hardhat-ganache": "^2.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.6",
-    "@openzeppelin/contracts": "^5.0.1",
-    "@openzeppelin/hardhat-upgrades": "^3.0.3",
-    "@typechain/hardhat": "^9.1.0",
-    "dotenv": "^16.4.4",
-    "ethers": "^6.11.1",
+    "dotenv": "^16.3.1",
+    "ethereum-waffle": "^4.0.10",
     "hardhat-contract-sizer": "^2.10.0",
     "hardhat-deploy": "^0.11.45",
     "hardhat-deploy-ethers": "^0.4.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "hardhat-gas-reporter": "^1.0.9"
   }
 }

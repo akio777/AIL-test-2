@@ -1,8 +1,13 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+import { task, HardhatUserConfig } from "hardhat/config";
+import "hardhat-deploy";
+import "hardhat-gas-reporter";
+import "hardhat-deploy-ethers";
 import "hardhat-contract-sizer";
+import "@typechain/hardhat";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-ganache";
+import "@nomiclabs/hardhat-etherscan";
 import "@nomicfoundation/hardhat-network-helpers";
 
 import path from "path";
@@ -24,7 +29,9 @@ const optimizedForDeployment = (version = "0.8.24", runs = 1000) => ({
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [
-      { version: "0.8.24" }
+      { version: "0.8.24" },
+      { version: "0.4.18" },
+      { version: "0.4.24" },
     ],
     settings: {
       optimizer: {
@@ -33,7 +40,7 @@ const config: HardhatUserConfig = {
       },
     },
     overrides: {
-      // "contracts/core/*.sol": optimizedForDeployment("0.8.22"),
+      "contracts/core/*.sol": optimizedForDeployment(),
     }
   },
   networks: {
@@ -42,8 +49,8 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.MNEMONIC,
       },
       forking: {
-        url: "",
-        blockNumber: 10,
+        url: process.env.URL!,
+        blockNumber: 19232900,
       },
       allowUnlimitedContractSize: true,
       gas: 30000000,
@@ -62,6 +69,9 @@ const config: HardhatUserConfig = {
     runOnCompile: true,
     disambiguatePaths: false,
   },
+  gasReporter: {
+    enabled: false
+  }
 };
 
 export default config;
