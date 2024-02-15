@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.24;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface IWeth {
     function deposit() external payable;
@@ -10,4 +10,4 @@ interface IWeth {
     function withdraw(uint256 wad) external;
 }
 
-interface IWethERC20Upgradeable is IWeth, IERC20Upgradeable {}
+interface IWethERC20Upgradeable is IWeth, IERC20 {}

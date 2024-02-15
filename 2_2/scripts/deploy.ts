@@ -30,17 +30,16 @@ export async function deploy(): Promise<DeployedStruct> {
         ADDRESS.ROUTER,
         ADDRESS.USDT
     )
-    await proxy.changeAdmin(signers[18].address)
-
+    const IERC20Artifact = "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol:IERC20Metadata"
     const TOKENS: TOKENS = {
         //@ts-ignore
         USDT: await ethers.getContractAt(
-            "contracts/interfaces/IERC20.sol:IERC20",
+            IERC20Artifact,
             ADDRESS.USDT
         ),
         //@ts-ignore
         WBTC: await ethers.getContractAt(
-            "contracts/interfaces/IERC20.sol:IERC20",
+            IERC20Artifact,
             ADDRESS.WBTC
         ),
         WETH: await ethers.getContractAt("WETH9", ADDRESS.WETH),

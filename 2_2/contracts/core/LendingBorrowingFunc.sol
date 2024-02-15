@@ -20,14 +20,16 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
             _transferETH(msg.sender, msg.value - amount);
         } else {
             {
-                uint256 balance = IERC20Upgradeable(tokenAddress).balanceOf(
-                    msg.sender
-                );
+                uint256 balance = IERC20(tokenAddress).balanceOf(msg.sender);
                 if (balance < amount) {
                     revert InsufficientAmount(balance, amount);
                 }
             }
-            ERC20Upgradeable(tokenAddress).transferFrom(
+            console.log("token : ", tokenAddress);
+            console.log(
+                IERC20(tokenAddress).allowance(msg.sender, address(this))
+            );
+            IERC20(tokenAddress).transferFrom(
                 msg.sender,
                 address(this),
                 amount
@@ -48,7 +50,7 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
 
             _transferETH(to, amount);
         } else {
-            IERC20Upgradeable tokenC = IERC20Upgradeable(token);
+            IERC20 tokenC = IERC20(token);
             uint256 balance = tokenC.balanceOf(address(this));
             if (balance < amount) revert InsufficientAmount(balance, amount);
 

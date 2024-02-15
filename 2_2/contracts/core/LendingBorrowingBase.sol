@@ -3,9 +3,8 @@ pragma solidity 0.8.24;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import "../interfaces/IWethERC20Upgradeable.sol";
 import "./LendingBorrowingEvent.sol";
@@ -18,8 +17,8 @@ contract LendingBorrowingBase is
     ReentrancyGuardUpgradeable,
     LendingBorrowingEvent
 {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
-    using SafeERC20Upgradeable for IWethERC20Upgradeable;
+    using SafeERC20 for IERC20;
+    using SafeERC20 for IWethERC20Upgradeable;
 
     uint256 internal WEI_UNIT;
     uint256 internal WEI_PERCENT_UNIT;

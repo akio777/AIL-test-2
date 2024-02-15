@@ -20,7 +20,7 @@ contract LendingBorrowing is LendingBorrowingFunc {
         tokenAddress = _tokenAddress;
         _setRouter(_routerAddress);
         __ReentrancyGuard_init_unchained();
-        __Ownable_init_unchained();
+        __Ownable_init_unchained(msg.sender);
     }
 
     function interestPercentage() external view returns (uint256) {

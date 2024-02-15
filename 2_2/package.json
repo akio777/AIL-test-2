@@ -5,8 +5,8 @@
     "clean": "bun hardhat clean"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^4.9.5",
-    "@openzeppelin/contracts-upgradeable": "^4.9.5",
+    "@openzeppelin/contracts": "5.0.1",
+    "@openzeppelin/contracts-upgradeable": "5.0.1",
     "@typechain/ethers-v5": "^11.1.2",
     "@typechain/hardhat": "^4.0.0",
     "@types/chai": "^4.3.0",
@@ -14,7 +14,7 @@
     "@types/node": "^20.11.5",
     "chai": "^4.3.4",
     "ethers": "^5.7.2",
-    "hardhat": "^2.8.2",
+    "hardhat": "2.20.0",
     "prettier": "^2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "ts-generator": "^0.1.1",

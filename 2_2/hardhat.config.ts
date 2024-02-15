@@ -29,6 +29,7 @@ const optimizedForDeployment = (version = "0.8.24", runs = 1000) => ({
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [
+      { version: "0.8.0" },
       { version: "0.8.24" },
       { version: "0.4.18" },
       { version: "0.4.24" },

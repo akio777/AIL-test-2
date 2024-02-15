@@ -85,7 +85,7 @@ interface IERC20 {
         address from,
         address to,
         uint256 amount
-    ) external returns (uint256);
+    ) external returns (bool);
 
     function name() external view returns (string memory);
 
