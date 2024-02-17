@@ -3,7 +3,7 @@ pragma solidity 0.8.24;
 
 contract LendingBorrowingEvent {
     event Lend(address indexed sender, uint256 amount);
-    event Unlend(address indexed sender, address token, uint256 amount);
+    event Unlend(address indexed sender, uint256 amount);
     event Borrow(
         address indexed sender,
         address collateralToken,

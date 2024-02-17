@@ -30,13 +30,22 @@ contract LendingBorrowing is LendingBorrowingFunc {
     function lend(uint256 tokenAmount) external {
         // * improvement
         // * need more time for design and big brain with business logic for handleing about manage risk of lender
-        console.log("token : ", tokenAddress);
         _transferIn(false, tokenAmount);
         lendingInfos[msg.sender] += tokenAmount;
         emit Lend(msg.sender, tokenAmount);
     }
 
-    function unlend(address tokenAddress, uint256 tokenAmount) external {}
+    function unlend(uint256 tokenAmount) external {
+        // * improvement
+        // * need more logic for handle exchange rate if total balance not matched with lend balance
+        require(
+            tokenAmount <= lendingInfos[msg.sender],
+            "lending-balance-exceed"
+        );
+        _transferOut(false, msg.sender, tokenAmount);
+        lendingInfos[msg.sender] -= tokenAmount;
+        emit Unlend(msg.sender, tokenAmount);
+    }
 
     function borrow(
         address collateralToken,

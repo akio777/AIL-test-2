@@ -42,7 +42,7 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transfer(address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) external;
 
     /**
      * @dev Returns the remaining number of tokens that `spender` will be

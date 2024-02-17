@@ -24,10 +24,6 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
                     revert InsufficientAmount(balance, amount);
                 }
             }
-            console.log("token : ", tokenAddress);
-            console.log(
-                IERC20(tokenAddress).allowance(msg.sender, address(this))
-            );
             IERC20(tokenAddress).transferFrom(
                 msg.sender,
                 address(this),
@@ -36,20 +32,15 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
         }
     }
 
-    function _transferOut(
-        bool isNative,
-        address token,
-        address to,
-        uint256 amount
-    ) internal {
-        if (isNative && token == WETH) {
+    function _transferOut(bool isNative, address to, uint256 amount) internal {
+        if (isNative && tokenAddress == WETH) {
             IWethERC20Upgradeable(WETH).withdraw(amount);
             if (address(this).balance < amount)
                 revert InsufficientAmount(address(this).balance, amount);
 
             _transferETH(to, amount);
         } else {
-            IERC20 tokenC = IERC20(token);
+            IERC20 tokenC = IERC20(tokenAddress);
             uint256 balance = tokenC.balanceOf(address(this));
             if (balance < amount) revert InsufficientAmount(balance, amount);
 
