@@ -13,34 +13,47 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
         emit SetInterestPercentage(msg.sender, oldValue, percent);
     }
 
-    function _transferIn(bool isNative, uint256 amount) internal {
-        if (isNative && tokenAddress == WETH) {
+    function setMinimumCollateralPercentage(
+        uint256 percent
+    ) external onlyOwner {
+        uint256 oldValue = _minCollateralPercentage;
+        _minCollateralPercentage = percent;
+        emit SetInterestPercentage(msg.sender, oldValue, percent);
+    }
+
+    function _transferIn(
+        bool isNative,
+        address token,
+        uint256 amount
+    ) internal {
+        if (isNative && token == WETH) {
             IWethERC20Upgradeable(WETH).deposit{value: amount}();
             _transferETH(msg.sender, msg.value - amount);
         } else {
             {
-                uint256 balance = IERC20(tokenAddress).balanceOf(msg.sender);
+                uint256 balance = IERC20(token).balanceOf(msg.sender);
                 if (balance < amount) {
                     revert InsufficientAmount(balance, amount);
                 }
             }
-            IERC20(tokenAddress).transferFrom(
-                msg.sender,
-                address(this),
-                amount
-            );
+            IERC20(token).transferFrom(msg.sender, address(this), amount);
         }
     }
 
-    function _transferOut(bool isNative, address to, uint256 amount) internal {
-        if (isNative && tokenAddress == WETH) {
+    function _transferOut(
+        bool isNative,
+        address token,
+        address to,
+        uint256 amount
+    ) internal {
+        if (isNative && token == WETH) {
             IWethERC20Upgradeable(WETH).withdraw(amount);
             if (address(this).balance < amount)
                 revert InsufficientAmount(address(this).balance, amount);
 
             _transferETH(to, amount);
         } else {
-            IERC20 tokenC = IERC20(tokenAddress);
+            IERC20 tokenC = IERC20(token);
             uint256 balance = tokenC.balanceOf(address(this));
             if (balance < amount) revert InsufficientAmount(balance, amount);
 

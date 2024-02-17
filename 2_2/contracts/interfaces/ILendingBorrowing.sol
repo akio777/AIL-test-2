@@ -2,37 +2,20 @@
 pragma solidity 0.8.24;
 
 interface ILendingBorrowing {
-    // // TODO event
-    // event Lend(address indexed sender, address token, uint256 amount);
-    // event Unlend(address indexed sender, address token, uint256 amount);
-    // event Borrow(
-    //     address indexed sender,
-    //     address collateralToken,
-    //     uint256 collateralAmount,
-    //     address borrowToken,
-    //     uint256 borrowAmount
-    // );
-
-    // event Repay(
-    //     address indexed sender,
-    //     address repayToken,
-    //     uint256 repayAmount,
-    //     uint256 interest
-    // );
-
-    // event SetInterestPercentage(
-    //     address indexed sender,
-    //     uint256 oldValue,
-    //     uint256 newValue
-    // );
-
-    // // TODO custom error
-    // error InsufficientAmount(uint balanceOrProvidedFromInput, uint required);
-
     // TODO setter function
 
     // TODO getter function
     function interestPercentage() external returns (uint256);
+
+    function minimumCollateralPercentage() external returns (uint256);
+
+    function totalLending() external returns (uint256);
+
+    function totalBorrowing() external returns (uint256);
+
+    function borrowingInfos(address userAddress) external returns (uint256);
+
+    function lendingInfos(address userAddress) external returns (uint256);
 
     // TODO action function
     function lend(uint256 tokenAmount) external payable;
@@ -42,7 +25,6 @@ interface ILendingBorrowing {
     function borrow(
         address collateralToken,
         uint256 collateralAmount,
-        address borrowToken,
         uint256 borrowAmount
     ) external payable;
 
