@@ -4,9 +4,10 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "../library/SafeERC20.sol";
 
 import "../interfaces/IWethERC20Upgradeable.sol";
+import "../interfaces/IERC20Upgradeable.sol";
 import "./LendingBorrowingEvent.sol";
 import "../interfaces/IDex.sol";
 
@@ -17,7 +18,7 @@ contract LendingBorrowingBase is
     ReentrancyGuardUpgradeable,
     LendingBorrowingEvent
 {
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Upgradeable;
     using SafeERC20 for IWethERC20Upgradeable;
 
     uint256 internal WEI_UNIT;

@@ -3,7 +3,6 @@ pragma solidity 0.8.24;
 pragma abicoder v2;
 
 import "./LendingBorrowingBase.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 contract LendingBorrowingFunc is LendingBorrowingBase {
     error InsufficientAmount(uint balanceOrProvidedFromInput, uint required);
