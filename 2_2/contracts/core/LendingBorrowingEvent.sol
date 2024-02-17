@@ -8,16 +8,10 @@ contract LendingBorrowingEvent {
         address indexed sender,
         address collateralToken,
         uint256 collateralAmount,
-        address borrowToken,
         uint256 borrowAmount
     );
 
-    event Repay(
-        address indexed sender,
-        address repayToken,
-        uint256 repayAmount,
-        uint256 interest
-    );
+    event Repay(address indexed sender, uint256 repayAmount);
 
     event SetInterestPercentage(
         address indexed sender,

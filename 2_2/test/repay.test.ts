@@ -12,7 +12,7 @@ import { ILendingBorrowing, LendingBorrowing } from "../types";
 
 // chai.use(solidityPack);
 
-describe('Testing borrowing function', () => {
+describe('Testing repay function', () => {
     let timeslot: SnapshotRestorer[] = [];
     let tx: ContractTransaction;
     let res: ContractReceipt;
@@ -52,7 +52,7 @@ describe('Testing borrowing function', () => {
             expect(afterBalance).to.be.gt(beforeBalance)
         })
     })
-    context("user1 trying to borrow and using WETH as collateral, borrow 1000 USDT collateral 2 WETH", () => {
+    context("user1 borrow and try repay", () => {
 
         it("Approve USDT, WETH proxy", async () => {
             const actor = signers[1]
@@ -87,20 +87,44 @@ describe('Testing borrowing function', () => {
             expect(beforeBalanceUSDTProxy).to.be.gt(afterBalanceUSDTProxy)
             expect(beforeBalanceWETHProxy).to.be.lt(afterBalanceWETHProxy)
             expect(beforeBalanceUSDTActor).to.be.lt(afterBalanceUSDTActor)
+            timeslot.push(await takeSnapshot())
         })
-        it("user1 call borrowing function revert case", async () => {
-            await timeslot[1].restore()
+        it("user1 repay full 100%", async () => {
             const actor = signers[1]
-            const collateralAmount = parseEther(2, await tokens.WETH.decimals())
-            const borrowAmount = parseEther(15_000, await tokens.USDT.decimals())
+            const borrowAmount = parseEther(1000, await tokens.USDT.decimals())
+            const beforeBalanceUSDTProxy = await tokens.USDT.balanceOf(proxy.address)
+            const beforeBalanceWETHProxy = await tokens.WETH.balanceOf(proxy.address)
+            const beforeBalanceUSDTActor = await tokens.USDT.balanceOf(actor.address)
+            const getRepayAmount = await proxy.connect(actor).getRepayAmount();
             await expect(
-                proxy.connect(actor).borrow(
-                    tokens.WETH.address,
-                    collateralAmount,
-                    borrowAmount,
+                proxy.connect(actor).repay(
+                    getRepayAmount
                 )
-            ).to.be.revertedWith("minimum-collateral-not-enough")
+            ).to.be.not.reverted
+            const afterBalanceUSDTProxy = await tokens.USDT.balanceOf(proxy.address)
+            const afterBalanceWETHProxy = await tokens.WETH.balanceOf(proxy.address)
+            const afterBalanceUSDTActor = await tokens.USDT.balanceOf(actor.address)
+            expect(beforeBalanceUSDTProxy).to.be.lt(afterBalanceUSDTProxy)
+            expect(beforeBalanceWETHProxy).to.be.gt(afterBalanceWETHProxy)
+            expect(beforeBalanceUSDTActor).to.be.gt(afterBalanceUSDTActor)
         })
+        it("user1 repay partial (repay partial not return collateral)", async () => {
+            await timeslot[2].restore()
+            const actor = signers[1]
+            const borrowAmount = parseEther(500, await tokens.USDT.decimals())
+            const beforeBalanceUSDTProxy = await tokens.USDT.balanceOf(proxy.address)
+            const beforeBalanceUSDTActor = await tokens.USDT.balanceOf(actor.address)
+            await expect(
+                proxy.connect(actor).repay(
+                    borrowAmount
+                )
+            ).to.be.not.reverted
+            const afterBalanceUSDTProxy = await tokens.USDT.balanceOf(proxy.address)
+            const afterBalanceUSDTActor = await tokens.USDT.balanceOf(actor.address)
+            expect(beforeBalanceUSDTProxy).to.be.lt(afterBalanceUSDTProxy)
+            expect(beforeBalanceUSDTActor).to.be.gt(afterBalanceUSDTActor)
+        })
+
 
 
     })

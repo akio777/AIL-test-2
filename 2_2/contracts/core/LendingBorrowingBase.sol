@@ -22,6 +22,12 @@ contract LendingBorrowingBase is
     using SafeERC20 for IERC20Upgradeable;
     using SafeERC20 for IWethERC20Upgradeable;
 
+    struct BorrowingInfos {
+        address collateralToken;
+        uint256 collateralAmounts;
+        uint256 borrowingAmounts;
+    }
+
     uint256 internal WEI_UNIT;
     uint256 internal WEI_PERCENT_UNIT;
 
@@ -35,6 +41,6 @@ contract LendingBorrowingBase is
 
     uint256 public totalLending;
     uint256 public totalBorrowing;
-    mapping(address => uint256) public borrowingInfos;
+    mapping(address => BorrowingInfos) public borrowingInfos;
     mapping(address => uint256) public lendingInfos;
 }

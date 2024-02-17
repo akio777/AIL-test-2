@@ -23,7 +23,7 @@ describe('Testing lending function', () => {
     let whales: WHALES
     let proxy: LendingBorrowing
     before(async () => {
-        // await resetForkByBlock();
+        await resetForkByBlock();
         signers = await getWrappedSigners();
         deployer = signers[0];
         await impersonateAccount(deployer.address);

@@ -45,7 +45,7 @@ export async function deploy(): Promise<DeployedStruct> {
         WETH: await ethers.getContractAt("WETH9", ADDRESS.WETH),
     };
     const _proxy: LendingBorrowing = await ethers.getContractAt("LendingBorrowing", proxy.address)
-
+    await _proxy.setInterestPercentage(parseEther(10))
     // * MOCK TOKEN HERE
     const WHALE_USDT_ADDRESS = "0xF977814e90dA44bFA03b6295A0616a897441aceC"
     const WHALE_USDT = await ethers.getSigner(WHALE_USDT_ADDRESS)

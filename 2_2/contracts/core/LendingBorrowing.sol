@@ -35,6 +35,7 @@ contract LendingBorrowing is LendingBorrowingFunc {
     function lend(uint256 tokenAmount) external {
         // * improvement
         // * need more time for design and big brain with business logic for handleing about manage risk of lender
+        require(tokenAmount > 0, "token-amount-must-more-than-zero");
         _transferIn(false, tokenAddress, tokenAmount);
         totalLending += tokenAmount;
         lendingInfos[msg.sender] += tokenAmount;
@@ -44,6 +45,7 @@ contract LendingBorrowing is LendingBorrowingFunc {
     function unlend(uint256 tokenAmount) external {
         // * improvement
         // * need more logic for handle exchange rate if total balance not matched with lend balance
+        require(tokenAmount > 0, "token-amount-must-more-than-zero");
         require(
             tokenAmount <= lendingInfos[msg.sender],
             "lending-balance-exceed"
@@ -59,6 +61,14 @@ contract LendingBorrowing is LendingBorrowingFunc {
         uint256 collateralAmount,
         uint256 borrowAmount
     ) external payable {
+        require(
+            collateralToken != address(0),
+            "collateral-token-is-zero-address"
+        );
+        require(collateralAmount > 0, "collateral-amounts-must-more-than-zero");
+        require(borrowAmount > 0, "borrow-amounts-must-more-than-zero");
+        // * improvement should call check liqudiate before this line
+        // * improvment should make it can borrow more than 1 loans like cumulative or multiple loan
         address[] memory path = new address[](2);
         path[0] = collateralToken;
         path[1] = tokenAddress;
@@ -87,11 +97,47 @@ contract LendingBorrowing is LendingBorrowingFunc {
             _transferIn(false, collateralToken, collateralAmount);
             _transferOut(false, tokenAddress, msg.sender, borrowAmount);
             totalBorrowing += borrowAmount;
-            borrowingInfos[msg.sender] += borrowAmount;
+            BorrowingInfos memory temp;
+            temp.collateralToken = collateralToken;
+            temp.collateralAmounts = collateralAmount;
+            temp.borrowingAmounts += borrowAmount;
+            borrowingInfos[msg.sender] = temp;
         }
     }
 
-    function repay(address repayToken, uint256 repayAmount) external payable {}
+    function getRepayAmount() external view returns (uint256 repayAmount) {
+        return _getRepayAmount();
+    }
+
+    function repay(uint256 repayAmount) external payable {
+        require(repayAmount > 0, "repay-amounts-must-more-than-zero");
+        require(borrowingInfos[msg.sender].borrowingAmounts > 0, "loan-closed");
+        uint256 requiredRepayAmount = _getRepayAmount();
+        if (repayAmount >= requiredRepayAmount) {
+            // TODO repay full
+            BorrowingInfos memory temp = borrowingInfos[msg.sender];
+            _transferIn(false, tokenAddress, requiredRepayAmount);
+            _transferOut(
+                false,
+                temp.collateralToken,
+                msg.sender,
+                temp.collateralAmounts
+            );
+            borrowingInfos[msg.sender] = borrowingInfos[address(0)];
+        } else {
+            // TODO repay partial
+            // * improvement, i would like to improve logic / handle about return collateral
+            requiredRepayAmount = _getPartialAmount(repayAmount);
+            BorrowingInfos storage temp = borrowingInfos[msg.sender];
+            temp.borrowingAmounts -= requiredRepayAmount;
+            _transferIn(false, tokenAddress, requiredRepayAmount);
+        }
+    }
+
+    function liquidate() external {
+        // * improvement
+        // * it's should call if current price of collateral less than minimumBorrowAmounts or some ratio
+    }
 
     // receive transfer ether directly
     receive() external payable {}

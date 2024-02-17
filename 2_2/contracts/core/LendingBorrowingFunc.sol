@@ -75,6 +75,24 @@ contract LendingBorrowingFunc is LendingBorrowingBase {
         routerDex = IRouter(_router);
     }
 
+    function _getRepayAmount() internal view returns (uint256 repayAmount) {
+        uint256 borrowAmount = borrowingInfos[msg.sender].borrowingAmounts;
+        repayAmount =
+            (borrowAmount * (WEI_PERCENT_UNIT + _interestPercentage)) /
+            WEI_PERCENT_UNIT;
+    }
+
+    function _getPartialAmount(
+        uint256 partialAmount
+    ) internal view returns (uint256 repayAmount) {
+        uint256 borrowAmount = borrowingInfos[msg.sender].borrowingAmounts;
+        require(partialAmount < borrowAmount, "invalid-repay-partial-amount");
+        repayAmount =
+            ((borrowAmount - partialAmount) *
+                (WEI_PERCENT_UNIT - _interestPercentage)) /
+            WEI_PERCENT_UNIT;
+    }
+
     function _getReserve(
         address[] memory path
     ) internal view returns (uint256 reserveIn, uint256 reserveOut) {
